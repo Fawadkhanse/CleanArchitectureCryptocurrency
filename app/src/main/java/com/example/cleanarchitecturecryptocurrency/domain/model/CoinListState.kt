@@ -2,6 +2,6 @@ package com.example.cleanarchitecturecryptocurrency.domain.model
 
 data class CoinListState (
     val isLoading: Boolean = false,
-    val coins: List<Coin> = emptyList(),
+    val coins: List<AllCoins> = emptyList(),
     val error: String = ""
 )

@@ -14,16 +14,24 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cleanarchitecturecryptocurrency.R
+import com.example.cleanarchitecturecryptocurrency.data.remote.CoinApi
+import com.example.cleanarchitecturecryptocurrency.data.remote.dato.CoinListDtoItem
 import com.example.cleanarchitecturecryptocurrency.databinding.FragmentCoinsBinding
-import com.example.cleanarchitecturecryptocurrency.domain.model.Coin
+import com.example.cleanarchitecturecryptocurrency.domain.model.AllCoins
 import com.example.cleanarchitecturecryptocurrency.presention.fragment.coin_list.adapter.CoinAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
     private val viewModel by viewModels<CoinViewModel>()
-    private  lateinit var coinList: List<Coin>
+    @Inject
+    lateinit var coinApi:CoinApi
+    private  lateinit var coinList: List<AllCoins>
     private var binding: FragmentCoinsBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +51,7 @@ class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
     }
 
     private fun initEvent() {
+        viewModel.getCoins("usd","","market_cap_desc",100,1,false,"1h")
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(state = Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
@@ -63,7 +72,7 @@ class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
         }
     }
 
-    private fun setRecycler(coins: List<Coin>) {
+    private fun setRecycler(coins: List<AllCoins>) {
         binding?.recyler?.layoutManager = LinearLayoutManager(requireContext())
         binding?.recyler?.adapter = CoinAdapter(coins,this)
     }

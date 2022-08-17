@@ -60,6 +60,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
     // paging 3
-    //def paging_version = "3.1.1"
-    //implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 }

@@ -20,6 +20,9 @@ import com.example.cleanarchitecturecryptocurrency.databinding.FragmentCoinsBind
 import com.example.cleanarchitecturecryptocurrency.domain.model.AllCoins
 import com.example.cleanarchitecturecryptocurrency.presention.fragment.coin_list.adapter.CoinAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +34,7 @@ class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
     private val viewModel by viewModels<CoinViewModel>()
     @Inject
     lateinit var coinApi:CoinApi
-    private  lateinit var coinList: List<AllCoins>
+    private   var coinList: List<AllCoins> = ArrayList()
     private var binding: FragmentCoinsBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

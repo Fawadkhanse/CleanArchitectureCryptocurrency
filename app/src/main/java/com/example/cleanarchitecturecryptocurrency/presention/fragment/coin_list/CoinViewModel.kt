@@ -6,10 +6,7 @@ import com.example.cleanarchitecturecryptocurrency.common.Resource
 import com.example.cleanarchitecturecryptocurrency.domain.model.CoinListState
 import com.example.cleanarchitecturecryptocurrency.domain.use_case.get_coins.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +35,6 @@ class CoinViewModel @Inject constructor(
                     }
                     is Resource.Error ->{
                         _state.value = CoinListState( error = result.message?:"An unexpected error occured")
-
                     }
 
                 }
@@ -46,5 +42,6 @@ class CoinViewModel @Inject constructor(
 
 
     }
+
 
 }

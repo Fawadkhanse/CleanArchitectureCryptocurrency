@@ -22,7 +22,7 @@ class GetCoinsUseCase @Inject constructor(
          page: Int,
          sparkline: Boolean,
          priceChangePercentage: String,
-    ): Flow<Resource<List<AllCoins>>> = flow {
+    ): Flow<Resource<List<AllCoins>>> = flow{
         try {
             emit(Resource.Loading<List<AllCoins>>())
             val coins = repository.getCoins(currency, ids, order, perPage, page, sparkline, priceChangePercentage).map { it.toAllCoins() }

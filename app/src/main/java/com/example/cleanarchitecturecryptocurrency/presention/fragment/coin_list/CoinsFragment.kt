@@ -30,14 +30,16 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
+class CoinsFragment : Fragment(), CoinAdapter.ItemClicked {
     private val viewModel by viewModels<CoinViewModel>()
+
     @Inject
-    lateinit var coinApi:CoinApi
-    private   var coinList: List<AllCoins> = ArrayList()
+    lateinit var coinApi: CoinApi
+    private var coinList: List<AllCoins> = ArrayList()
     private var binding: FragmentCoinsBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
 
         }
@@ -49,15 +51,16 @@ class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCoinsBinding.inflate(inflater, container, false)
+        Log.d("TAG", "onCreateView: ")
         initEvent()
         return binding?.root
     }
 
     private fun initEvent() {
-        viewModel.getCoins("usd","","market_cap_desc",100,1,false,"1h")
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
+        viewModel.getCoins("usd", "", "market_cap_desc", 100, 1, false, "1h")
+        requireParentFragment().lifecycleScope.launch {
+            repeatOnLifecycle(state = Lifecycle.State.CREATED) {
+                viewModel.state.collectLatest { state ->
                     if (state.isLoading) {
                         Log.d("TAG", "isLoading: ")
 
@@ -77,17 +80,25 @@ class CoinsFragment : Fragment(),CoinAdapter.ItemClicked {
 
     private fun setRecycler(coins: List<AllCoins>) {
         binding?.recyler?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.recyler?.adapter = CoinAdapter(coins,this)
+        binding?.recyler?.adapter = CoinAdapter(coins, this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+        Log.d("TAG", "onDestroyView: ")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("TAG", "onDestroy: ")
     }
 
     override fun clicked(position: Int) {
         val item = coinList[position]
-        Navigation.findNavController(binding!!.root).navigate(R.id.action_coinsFragment2_to_coinDetailFragment2)
+        Navigation.findNavController(binding!!.root)
+            .navigate(R.id.action_coinsFragment2_to_coinDetailFragment2)
     }
+
 
 }
